@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+
+    <bean id="dkInfluxdbDao" class="com.netease.dk.storage.influxdb.InfluxDbDao">
+		<constructor-arg index="0">
+			<value>${influxdb.address}</value>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<value>${influxdb.username}</value>
+		</constructor-arg>
+		<constructor-arg index="2">
+			<value>${influxdb.password}</value>
+		</constructor-arg>
+		<constructor-arg index="3">
+			<value>${influxdb.database}</value>
+		</constructor-arg>
+	</bean>
+    <bean class="com.netease.dk.storage.influxdb.InfluxDBStatisticsStorage" id="InfluxDBStatisticsStorage">
+    	<property name="dkInfluxdbDao"  ref="dkInfluxdbDao" />
+    </bean>
+    
+    <dubbo:service interface="com.dubboclub.dk.storage.StatisticsStorage" ref="InfluxDBStatisticsStorage"/>
+</beans>
